@@ -10,6 +10,10 @@ public abstract class Spell {
         this.manaCost = manaCost;
     }
 
+    public void use(){
+        System.out.println("The spell is use...");
+    }
+
     @Override
     public String toString() {
         return "Spell{" +
@@ -18,4 +22,11 @@ public abstract class Spell {
                 '}';
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getManaCost() {
+        return manaCost;
+    }
 }

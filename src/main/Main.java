@@ -14,6 +14,7 @@ public class Main {
         int monsterKilled = 0;
 
         System.out.println("\nWelcome in the game, you are knight who want to destroy all bad vilains !\n");
+
         Knight player = new Knight();
         Shop shop = new Shop();
         Monster monster = randomMonster();
@@ -21,19 +22,20 @@ public class Main {
         fightKnight(player,monster,shop,iteration, monsterKilled);
 
         // TODO monnstre plus difficile en fonction de l'exp ( multiplicateur)
-        // TODO reduire la durabilite des armures quand il y a un coup
-        // TODO pouvoir pour le hero --> EN COURS
-        // TODO nouveau mage herite
+        // TODO reduire la durabilite des armures quand il y a un coup --> TERMINER
+        // TODO pouvoir pour le hero --> TERMINER
+        // TODO nouveau mage herite --> TERMINER
         // TODO plus d'objet tel que : potion resistance ; arme differente ;
-        // TODO IA des monstres : plus trop de vie, reprend de la vie etc...
+        // TODO IA des monstres : plus trop de vie, reprend de la vie etc... --> TERMINER
         // TODO Vraie utilité des objets magique tel que de la resistance ou du gain de mana
         // TODO Ajouter les anneaux dans les equipements
+        // TODO Refacto string console + afficher toutes les valeurs des objets dans le shop
 
     }
 
     public static Monster randomMonster(){
         Monster monster;
-        int randomNumber = (int)(Math.random() * 4);
+        int randomNumber = (int)(Math.random() * 9);
 
         switch (randomNumber){
             case 0:
@@ -47,6 +49,21 @@ public class Main {
                 break;
             case 3:
                 monster = new Wizard();
+                break;
+            case 4:
+                monster = new DarkWizard();
+                break;
+            case 5:
+                monster = new WhiteWizard();
+                break;
+            case 6:
+                monster = new Nazgul();
+                break;
+            case 7:
+                monster = new DevilWizard();
+                break;
+            case 8:
+                monster = new Ghoul();
                 break;
             default:
                 System.out.println("Default Case");
@@ -67,12 +84,22 @@ public class Main {
                 System.out.println("A fight begin !");
             }
             System.out.println("--> A - Attack");
+            if(player.getLevel() >= player.getLEVELMINICAPACITIES()) {
+                System.out.println("--> S - Use a spell");
+            }
             System.out.println("--> I - Check your inventory");
             System.out.println("--> N - Do nothing");
             System.out.println("Choose your action : ");
             switch (sc.nextLine()) {
                 case "a":
                     player.attack(monster);
+                    break;
+                case "s":
+                    if(player.getLevel() >= player.getLEVELMINICAPACITIES()) {
+                        player.useSpell(monster);
+                    }else{
+                        System.out.println("You choose to do nothing...");
+                    }
                     break;
                 case "i":
                     player.showInventory();
@@ -105,6 +132,7 @@ public class Main {
 
     public static void actionKnight(Knight player, Shop shop, int iteration, int monsterKilled){
         Scanner sc = new Scanner(System.in);
+        System.out.println(player.toString());
         System.out.println("What do you want to do ?");
         System.out.println("--> C - Continue to the next battle");
         System.out.println("--> I - Check your inventory");

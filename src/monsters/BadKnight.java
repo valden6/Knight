@@ -5,6 +5,10 @@ import objects.*;
 
 public class BadKnight extends Monster{
 
+    static final int MAX_LIFE = 100;
+    static final int GOLD_EARNED = 30;
+    static final int XP_EARNED = 40;
+
     private Sword sword;
     private Helmet helmet;
     private Breastplate breastplate;
@@ -12,7 +16,7 @@ public class BadKnight extends Monster{
     private Leggings leggings;
 
     public BadKnight() {
-        super("Bad Knight", 60,30, 40);
+        super("Bad Knight", MAX_LIFE,GOLD_EARNED, XP_EARNED);
         this.sword = new Sword("Sharpened sword",5,100,40);
         this.helmet = new Helmet("knight's helmet",5,100,60);
         this.gauntlet = new Gauntlet("knight's gauntlet",2,100,130);
@@ -31,9 +35,7 @@ public class BadKnight extends Monster{
 
     @Override
     public void attack(Knight player) {
-        player.setLife(player.getLife() - this.sword.getDammage());
-        System.out.println("The " + this.getName() + " attack and give you " + this.sword.getDammage() + " dammage");
-        System.out.println("You have " + player.getLife() + " hp");
+        player.receiveDammage("The " + this.getName() + " attack with his sword and", this.sword.getDammage());
     }
 
     @Override

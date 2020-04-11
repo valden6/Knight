@@ -1,16 +1,23 @@
 package hero;
 
+import hero.spells.DammageSpell;
+import hero.spells.HealingSpell;
+import hero.spells.Spell;
+import hero.spells.SpellsList;
 import monsters.Monster;
 import objects.*;
 import objects.Object;
 
+import java.awt.peer.ScrollbarPeer;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Knight {
 
-    static final int MAXLIFE = 100;
-    static final int DAMMAGENOWEAPON = 5;
+    static final int MAX_LIFE = 100;
+    static final int MAX_MANA = 100;
+    static final int DAMMAGE_NO_WEAPON = 5;
+    static final int LEVEL_MINI_CAPACITIES = 2;
 
     private int life;
     private int level;
@@ -18,6 +25,8 @@ public class Knight {
     private int levelUp;
     private int gold;
     private int mana;
+    private Capacities capacities;
+    private SpellsList spellsList;
     private Inventory inventory;
     private Weapon leftHand;
     private Armor rightHand;
@@ -27,18 +36,20 @@ public class Knight {
     private Armor breasts;
 
     public Knight() {
-        this.life = MAXLIFE;
+        this.life = MAX_LIFE;
         this.level = 1;
         this.xp = 0;
         this.gold = 5;
         this.levelUp = 10;
-        this.mana = 100;
+        this.mana = MAX_MANA;
 
         Sword sword = new Sword("Epée normale",50,100,50);
-        HealPotion healPotion = new HealPotion("popo",100,30, 50);
+        HealPotion healPotion = new HealPotion("heal",100,30, 100);
+        ManaPotion manaPotion = new ManaPotion("mana",100,30, 100);
+        Shield shield = new Shield("shield",10,100,500);
 
         this.leftHand = sword;
-        this.rightHand = null;
+        this.rightHand = shield;
         this.head = null;
         this.arms = null;
         this.legs = null;
@@ -47,7 +58,13 @@ public class Knight {
         ArrayList<Object> objects = new ArrayList<>();
         objects.add(sword);
         objects.add(healPotion);
+        objects.add(manaPotion);
         this.inventory = new Inventory(objects);
+
+        ArrayList<Spell> spells = new ArrayList<>();
+        this.capacities = new Capacities(spells);
+
+        this.spellsList = new SpellsList();
     }
 
     public void attack(Monster target){
@@ -61,7 +78,27 @@ public class Knight {
             }
         } else {
             System.out.println("You don't have weapon in your hand...");
-            target.receiveDammage(DAMMAGENOWEAPON);
+            target.receiveDammage(DAMMAGE_NO_WEAPON);
+        }
+    }
+
+    public void useSpell(Monster monster){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Which spell do you want to use ?");
+        System.out.println(this.capacities.getSpells().toString());
+        System.out.println("Choose your spell : ");
+        Spell spellChoose = this.capacities.getSpellByName(sc.nextLine());
+        
+        if (this.mana >= spellChoose.getManaCost()){
+            this.mana -= spellChoose.getManaCost();
+            System.out.println("Your mana is at " + this.mana);
+            if(spellChoose.getName().equals("Heal")){
+                ((HealingSpell) spellChoose).use(this);
+            }else if(spellChoose.getName().equals("Dammage")){
+                ((DammageSpell) spellChoose).use(monster);
+            }
+        } else {
+            System.out.println("You don't have enough mana !");
         }
     }
 
@@ -71,13 +108,24 @@ public class Knight {
         System.out.println("Your new weapon is " + this.leftHand.getName());
     }
 
-    public void heal(String potionName){
-        HealPotion potion = (HealPotion) this.inventory.getObjectByName(potionName);
-        this.life += potion.getLifeGiven();
-        this.inventory.removeInInventory(potion);
-        if(this.life > MAXLIFE)
-            this.life = MAXLIFE;
-        System.out.println("Your life is at " + this.life);
+    public void regenerate(String potionName){
+        if(potionName.equals("heal")) {
+            HealPotion potion = (HealPotion) this.inventory.getObjectByName(potionName);
+            this.life += potion.getLifeGiven();
+            this.inventory.removeInInventory(potion);
+            if(this.life > MAX_LIFE)
+                this.life = MAX_LIFE;
+            System.out.println("Your life is at " + this.life);
+        }else if (potionName.equals("mana")) {
+            ManaPotion potion = (ManaPotion) this.inventory.getObjectByName(potionName);
+            this.mana += potion.getManaGiven();
+            this.inventory.removeInInventory(potion);
+            if(this.mana > MAX_MANA)
+                this.mana = MAX_MANA;
+            System.out.println("Your mana is at " + this.mana);
+        }else{
+            System.out.println("Default case : ! BUG !");
+        }
     }
 
     public void changeArmor(String futureArmor){
@@ -111,7 +159,12 @@ public class Knight {
     }
 
     public void removeGold(int number) {
-        this.gold -= number;
+        if(this.gold > 0) {
+            this.gold -= number;
+            if (this.gold <= 0) {
+                this.gold = 0;
+            }
+        }
         System.out.println("You loose " + number + " gold and have now " + this.gold + " gold");
     }
 
@@ -120,15 +173,77 @@ public class Knight {
         System.out.println("You receive a new object in your inventory: " + object.toString());
     }
 
+    public void receiveDammage(String monsterAttack, int dammage){
+        dammage = calculateArmor(dammage);
+        reduceDurabilityEquipment(dammage);
+        if (dammage > 0 ){
+            this.life -= dammage;
+            System.out.println(monsterAttack + " give you " + dammage + " dammage");
+        }else {
+            System.out.println(monsterAttack + " you take 0 dammage due to your armor");
+        }
+        System.out.println("You have " + this.life + " hp");
+    }
+
     public void receiveXp(int number) {
         this.xp += number;
         System.out.println("You receive " + number + " xp and have now " + this.xp + " xp");
         if(this.xp >= this.levelUp){
             this.level += 1;
             this.xp = 0;
-            setUpLevelUp();
             System.out.println("You are level " + level + " !");
+            checkLevel();
+            setUpLevelUp();
         }
+    }
+
+    private int calculateArmor(int dammage){
+        int armor = 0;
+
+        if (!(this.rightHand == null))
+            armor += this.rightHand.getProtection();
+        if (!(this.head == null))
+            armor += this.head.getProtection();
+        if (!(this.breasts == null))
+            armor += this.breasts.getProtection();
+        if (!(this.arms == null))
+            armor += this.arms.getProtection();
+        if (!(this.legs == null))
+            armor += this.legs.getProtection();
+
+        dammage -= armor;
+        return dammage;
+    }
+
+    private void reduceDurabilityEquipment(int reduction){
+        if (!(this.rightHand == null))
+            this.rightHand.setDurability(this.rightHand.getDurability() - reduction);
+        if (!(this.head == null))
+            this.head.setDurability(this.head.getDurability() - reduction);
+        if (!(this.breasts == null))
+            this.breasts.setDurability(this.breasts.getDurability() - reduction);
+        if (!(this.arms == null))
+            this.arms.setDurability(this.arms.getDurability() - reduction);
+        if (!(this.legs == null))
+            this.legs.setDurability(this.legs.getDurability() - reduction);
+    }
+
+    private void checkLevel() {
+        if (this.level >= LEVEL_MINI_CAPACITIES) {
+            Spell spellChosen = chooseSpellToAdd();
+            this.spellsList.removeInSpellsList(spellChosen);
+            this.capacities.addInCapacities(spellChosen);
+        }
+    }
+
+    private Spell chooseSpellToAdd() {
+        Spell spell = null;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Which spell do you want ?");
+        System.out.println(this.spellsList.toString());
+        System.out.println("Choose your spell : ");
+            spell = this.spellsList.getSpellByName(sc.nextLine());
+        return spell;
     }
 
     public Inventory getInventory() {
@@ -139,12 +254,12 @@ public class Knight {
         return gold;
     }
 
-    public int getLife() {
-        return life;
-    }
-
     public void setLife(int life) {
         this.life = life;
+    }
+
+    public int getLife() {
+        return life;
     }
 
     public int getLevel() {
@@ -180,7 +295,7 @@ public class Knight {
         System.out.println("What do you want to do ?");
         System.out.println("--> W - Change weapon");
         System.out.println("--> A - Change/add armor");
-        System.out.println("--> H - Take heal potion");
+        System.out.println("--> P - Take a potion");
         System.out.println("--> S - Show your equipment wear");
         System.out.println("--> Q - Quit the inventory");
         System.out.println("Choose your action : ");
@@ -199,11 +314,11 @@ public class Knight {
                 changeArmor(sc.nextLine());
                 showInventory();
                 break;
-            case "h":
-                System.out.println("You choose to take a heal potion...");
+            case "p":
+                System.out.println("You choose to take a potion...");
                 sc = new Scanner(System.in);
                 System.out.println("Which potion ?");
-                heal(sc.nextLine());
+                regenerate(sc.nextLine());
                 showInventory();
                 break;
             case "q":
@@ -245,5 +360,23 @@ public class Knight {
 
     public void setLeftHand(Weapon leftHand) {
         this.leftHand = leftHand;
+    }
+
+    public static int getMAXLIFE() {
+        return MAX_LIFE;
+    }
+
+    public static int getLEVELMINICAPACITIES() {
+        return LEVEL_MINI_CAPACITIES;
+    }
+
+    @Override
+    public String toString() {
+        return "Knight { " +
+                life + " hp" +
+                " ; " + mana + " mana " +
+                "; level " + level +
+                " ; " + gold + " gold " +
+                '}';
     }
 }

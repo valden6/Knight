@@ -3,12 +3,13 @@ package hero;
 import objects.Object;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Inventory {
 
-    private ArrayList<Object> objects;
+    private List<Object> objects;
 
-    public Inventory(ArrayList<Object> objects) {
+    public Inventory(List<Object> objects) {
         this.objects = objects;
     }
 
@@ -20,7 +21,7 @@ public class Inventory {
         this.objects.remove(object);
     }
 
-    public ArrayList<Object> getObjects() {
+    public List<Object> getObjects() {
         return objects;
     }
 

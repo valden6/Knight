@@ -52,6 +52,7 @@ public class Monster {
 
     public void receiveDammage(int dammage){
         this.life -= dammage;
+        System.out.println("The " + this.name + " takes " + dammage + " dammage");
 
         if (this.life <= 0) {
             this.setAlive(false);

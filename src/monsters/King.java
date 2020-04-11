@@ -6,10 +6,14 @@ import objects.Object;
 
 public class King extends BadKnight {
 
+    static final int MAX_LIFE = 100;
+    static final int GOLD_EARNED = 1000;
+    static final int XP_EARNED = 500;
+
     private Shield shield;
 
     public King() {
-        super("King", 1,1000, 500,
+        super("King", MAX_LIFE,GOLD_EARNED, XP_EARNED,
                 new Sword("golden sword",50,100,500),
                 new Helmet("king's helmet",5,100,550),
                 new Gauntlet("king's gauntlet",2,100,600),
@@ -19,11 +23,14 @@ public class King extends BadKnight {
         this.shield = new Shield("king's shield",5,100,450);
     }
 
+    public King(String name, int life, int goldEarned, int xpEarned, Sword sword, Helmet helmet, Gauntlet gauntlet, Breastplate breastplate, Leggings leggings, Shield shield) {
+        super(name, life, goldEarned, xpEarned, sword, helmet, gauntlet, breastplate, leggings);
+        this.shield = shield;
+    }
+
     @Override
     public void attack(Knight player) {
-        player.setLife(player.getLife() - this.getSword().getDammage());
-        System.out.println("The " + this.getName() + " attack and give you " + this.getSword().getDammage() + " dammage");
-        System.out.println("You have " + player.getLife() + " hp");
+        player.receiveDammage("The " + this.getName() + " attack with his sword and", this.getSword().getDammage());
     }
 
     @Override
