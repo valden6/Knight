@@ -2,12 +2,9 @@ package monsters;
 
 import hero.Knight;
 import objects.*;
+import settings.Settings;
 
 public class BadKnight extends Monster{
-
-    static final int MAX_LIFE = 100;
-    static final int GOLD_EARNED = 30;
-    static final int XP_EARNED = 40;
 
     private Sword sword;
     private Helmet helmet;
@@ -16,7 +13,7 @@ public class BadKnight extends Monster{
     private Leggings leggings;
 
     public BadKnight() {
-        super("Bad Knight", MAX_LIFE,GOLD_EARNED, XP_EARNED);
+        super("Bad Knight", Settings.BAD_KNIGHT_MAX_LIFE,Settings.BAD_KNIGHT_GOLD_EARNED, Settings.BAD_KNIGHT_XP_EARNED);
         this.sword = new Sword("Sharpened sword",5,100,40);
         this.helmet = new Helmet("knight's helmet",5,100,60);
         this.gauntlet = new Gauntlet("knight's gauntlet",2,100,130);
@@ -35,19 +32,19 @@ public class BadKnight extends Monster{
 
     @Override
     public void attack(Knight player) {
-        player.receiveDammage("The " + this.getName() + " attack with his sword and", this.sword.getDammage());
+        player.receiveDamage("The " + this.getName() + " attack with his sword and", this.sword.getDamage());
     }
 
     @Override
-    public void receiveDammage(int dammage) {
-        dammage = calculateArmor(dammage);
-        reduceDurabilityEquipment(dammage);
+    public void receiveDamage(int damage) {
+        damage = calculateArmor(damage);
+        reduceDurabilityEquipment(damage);
 
-        if (dammage > 0 ){
-            this.setLife(this.getLife() - dammage);
-            System.out.println("The " + this.getName() + " takes " + dammage + " dammage");
+        if (damage > 0 ){
+            this.setLife(this.getLife() - damage);
+            System.out.println("The " + this.getName() + " takes " + damage + " damage");
         }else {
-            System.out.println("You make 0 dammage due to the armor of the Bad Knight");
+            System.out.println("You make 0 damage due to the armor of the Bad Knight");
         }
 
         if (this.getLife() <= 0) {
@@ -78,10 +75,10 @@ public class BadKnight extends Monster{
         return leggings;
     }
 
-    public int calculateArmor(int dammage){
+    public int calculateArmor(int damage){
         int armor = this.helmet.getProtection() + this.gauntlet.getProtection() + this.breastplate.getProtection() + this.leggings.getProtection();
-        dammage -= armor;
-        return dammage;
+        damage -= armor;
+        return damage;
     }
 
     public void reduceDurabilityEquipment(int reduction){

@@ -3,6 +3,7 @@ package main;
 import hero.Knight;
 import hero.Shop;
 import monsters.*;
+import settings.Settings;
 
 import java.util.Scanner;
 
@@ -13,7 +14,11 @@ public class Main {
         int iteration = -1;
         int monsterKilled = 0;
 
-        System.out.println("\nWelcome in the game, you are knight who want to destroy all bad vilains !\n");
+        System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("++++++++++++++++++++++++ KNIGHT +++++++++++++++++++++++++");
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 
         Knight player = new Knight();
         Shop shop = new Shop();
@@ -21,15 +26,11 @@ public class Main {
 
         fightKnight(player,monster,shop,iteration, monsterKilled);
 
-        // TODO monnstre plus difficile en fonction de l'exp ( multiplicateur)
-        // TODO reduire la durabilite des armures quand il y a un coup --> TERMINER
-        // TODO pouvoir pour le hero --> TERMINER
-        // TODO nouveau mage herite --> TERMINER
+        // TODO monstre plus difficile en fonction de l'exp ( multiplicateur)
         // TODO plus d'objet tel que : potion resistance ; arme differente ;
-        // TODO IA des monstres : plus trop de vie, reprend de la vie etc... --> TERMINER
         // TODO Vraie utilité des objets magique tel que de la resistance ou du gain de mana
         // TODO Ajouter les anneaux dans les equipements
-        // TODO Refacto string console + afficher toutes les valeurs des objets dans le shop
+        // TODO Refacto string console + afficher toutes les valeurs des objets dans le shop + fichier de conf --> TERMINER
 
     }
 
@@ -81,21 +82,19 @@ public class Main {
             iteration++;
             if (iteration == 0) {
                 System.out.println("A " + monster.getName() + " appear !");
-                System.out.println("A fight begin !");
             }
             System.out.println("--> A - Attack");
-            if(player.getLevel() >= player.getLEVELMINICAPACITIES()) {
+            if(player.getLevel() >= Settings.KNIGHT_LEVEL_MINI_CAPACITIES) {
                 System.out.println("--> S - Use a spell");
             }
             System.out.println("--> I - Check your inventory");
             System.out.println("--> N - Do nothing");
-            System.out.println("Choose your action : ");
             switch (sc.nextLine()) {
                 case "a":
                     player.attack(monster);
                     break;
                 case "s":
-                    if(player.getLevel() >= player.getLEVELMINICAPACITIES()) {
+                    if(player.getLevel() >= Settings.KNIGHT_LEVEL_MINI_CAPACITIES) {
                         player.useSpell(monster);
                     }else{
                         System.out.println("You choose to do nothing...");
@@ -133,7 +132,7 @@ public class Main {
     public static void actionKnight(Knight player, Shop shop, int iteration, int monsterKilled){
         Scanner sc = new Scanner(System.in);
         System.out.println(player.toString());
-        System.out.println("What do you want to do ?");
+        System.out.println("Action : ");
         System.out.println("--> C - Continue to the next battle");
         System.out.println("--> I - Check your inventory");
         System.out.println("--> S - Go to the shop");
@@ -144,12 +143,10 @@ public class Main {
                 fightKnight(player,randomMonster(),shop,iteration,monsterKilled);
                 break;
             case "i":
-                System.out.println("You choose to show your inventory...");
                 player.showInventory();
                 actionKnight(player,shop,iteration, monsterKilled);
                 break;
             case "s":
-                System.out.println("You choose to go to the shop...");
                 shop.showShop(player);
                 actionKnight(player,shop,iteration, monsterKilled);
                 break;
@@ -169,15 +166,14 @@ public class Main {
         System.out.println("You had " + player.getGold() + " gold !\n");
         System.out.println("--> R - Replay");
         System.out.println("--> Q - Quit the game");
-        System.out.println("Choose your action : ");
 
         switch (sc.nextLine()){
             case "r":
-                System.out.println("You choose to replay a game...\n");
+                System.out.println("You choose to replay a game...");
                 main(null);
                 break;
             case "q":
-                System.out.println("Bye! See you soon...\n");
+                System.out.println("Bye! See you soon...");
                 break;
             default:
                 System.out.println("Default continue...");

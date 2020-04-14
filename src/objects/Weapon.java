@@ -2,14 +2,20 @@ package objects;
 
 public abstract class Weapon extends Object {
 
-    private int dammage;
+    private int damage;
 
-    public Weapon(String name, int dammage, int durability, int value) {
+    public Weapon(String name, int damage, int durability, int value) {
         super(name,durability,value);
-        this.dammage = dammage;
+        this.damage = damage;
     }
 
-    public int getDammage() {
-        return dammage;
+    public int getDamage() {
+        return damage;
     }
+
+    @Override
+    public String toString() {
+        return "\n " + this.getName() + " (damage: " + this.damage + " ; durability: " + this.getDurability() + " ; value: " + this.getValue() + ")";
+    }
+
 }

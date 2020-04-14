@@ -14,19 +14,16 @@ public abstract class Spell {
         System.out.println("The spell is use...");
     }
 
-    @Override
-    public String toString() {
-        return "Spell{" +
-                "name='" + name + '\'' +
-                ", manaCost=" + manaCost +
-                '}';
-    }
-
     public String getName() {
         return name;
     }
 
     public int getManaCost() {
         return manaCost;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

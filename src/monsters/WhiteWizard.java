@@ -2,27 +2,20 @@ package monsters;
 
 import hero.Knight;
 import objects.*;
+import settings.Settings;
 
 public class WhiteWizard extends Wizard {
-
-    static final int MAX_LIFE = 150;
-    static final int GOLD_EARNED = 300;
-    static final int XP_EARNED = 500;
-    static final int MANA_MAX = 150;
-    static final int SPELL_MANA_COST = 50;
-    static final int REGENERATION_MANA = 50;
-    static final int HEALING = 30;
 
     private int healing;
 
     public WhiteWizard() {
-        super("White wizard", MAX_LIFE,GOLD_EARNED, XP_EARNED,MANA_MAX,SPELL_MANA_COST,REGENERATION_MANA,
+        super("White wizard", Settings.WHITE_WIZARD_MAX_LIFE,Settings.WHITE_WIZARD_GOLD_EARNED, Settings.WHITE_WIZARD_XP_EARNED,Settings.WHITE_WIZARD_MANA_MAX,Settings.WHITE_WIZARD_SPELL_MANA_COST,Settings.WHITE_WIZARD_REGENERATION_MANA,
                 new WizardStaff("white wizard staff",25,100,300),
                 new Hat("white wizard hat",5,100,40),
                 new Dress("white wizard dress",5,100,60),
                 new Gloves("white wizard gloves",2,100,130),
                 new HealPotion("white wizard heal potion",100,100,50));
-        this.healing = HEALING;
+        this.healing = Settings.WHITE_WIZARD_HEALING;
     }
 
     @Override

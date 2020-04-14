@@ -2,27 +2,22 @@ package monsters;
 
 import hero.Knight;
 import objects.*;
+import settings.Settings;
+
+import java.util.Set;
 
 public class DevilWizard extends Wizard {
-
-    static final int MAX_LIFE = 100;
-    static final int GOLD_EARNED = 500;
-    static final int XP_EARNED = 700;
-    static final int MANA_MAX = 100;
-    static final int SPELL_MANA_COST = 50;
-    static final int REGENERATION_MANA = 50;
-    static final int LIFE_DRAIN = 20;
 
     private int lifeDrain;
 
     public DevilWizard() {
-        super("Devil wizard", MAX_LIFE,GOLD_EARNED, XP_EARNED,MANA_MAX,SPELL_MANA_COST,REGENERATION_MANA,
+        super("Devil wizard", Settings.DEVIL_WIZARD_MAX_LIFE,Settings.DEVIL_WIZARD_GOLD_EARNED, Settings.DEVIL_WIZARD_XP_EARNED,Settings.DEVIL_WIZARD_MANA_MAX,Settings.DEVIL_WIZARD_SPELL_MANA_COST,Settings.DEVIL_WIZARD_REGENERATION_MANA,
                 new WizardStaff("devil wizard staff",25,100,300),
                 new Hat("devil wizard hat",5,100,40),
                 new Dress("devil wizard dress",5,100,60),
                 new Gloves("devil wizard gloves",2,100,130),
                 new HealPotion("devil wizard heal potion",100,100,50));
-        this.lifeDrain = LIFE_DRAIN;
+        this.lifeDrain = Settings.DEVIL_WIZARD_LIFE_DRAIN;
     }
 
     @Override
@@ -46,24 +41,24 @@ public class DevilWizard extends Wizard {
     private void lifeDrain(Knight player){
         if(this.getMana() >= this.getSpellManaCost()){
             this.setMana(this.getMana() - this.getSpellManaCost());
-            player.receiveDammage("The " + this.getName() + " drain your life, take you " + this.lifeDrain + " hp", this.lifeDrain);
+            player.receiveDamage("The " + this.getName() + " drain your life, take you " + this.lifeDrain + " hp", this.lifeDrain);
             this.setLife(this.getLife() + this.lifeDrain);
-            if (this.getLife() < MAX_LIFE)
-               this.setLife(MAX_LIFE);
+            if (this.getLife() > Settings.DEVIL_WIZARD_MAX_LIFE)
+               this.setLife(Settings.DEVIL_WIZARD_MAX_LIFE);
             System.out.println("The " + this.getName() + " have " + this.getLife() + " hp");
         }
     }
 
     @Override
-    public void receiveDammage(int dammage) {
-        dammage = calculateArmor(dammage);
-        reduceDurabilityEquipment(dammage);
+    public void receiveDamage(int damage) {
+        damage = calculateArmor(damage);
+        reduceDurabilityEquipment(damage);
 
-        if (dammage > 0 ){
-            this.setLife(this.getLife() - dammage);
-            System.out.println("The " + this.getName() + " takes " + dammage + " dammage");
+        if (damage > 0 ){
+            this.setLife(this.getLife() - damage);
+            System.out.println("The " + this.getName() + " takes " + damage + " damage");
         }else {
-            System.out.println("You make 0 dammage due to the armor of the wizard");
+            System.out.println("You make 0 damage due to the armor of the wizard");
         }
 
         if (this.getLife() <= 0) {

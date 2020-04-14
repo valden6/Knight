@@ -30,8 +30,6 @@ public abstract class Object {
 
     @Override
     public String toString() {
-        return "\nname: " + name + '\n' +
-                "durability: " + durability + '\n' +
-                "value: " + value + '\n';
+        return "\n " + name + " (durability: " + durability + " ; value: " + value + ")";
     }
 }

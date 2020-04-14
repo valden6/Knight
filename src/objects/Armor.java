@@ -12,4 +12,9 @@ public abstract class Armor extends Object {
     public int getProtection() {
         return protection;
     }
+
+    @Override
+    public String toString() {
+        return "\n " + this.getName() + " (protection: " + this.protection + " ; durability: " + this.getDurability() + " ; value: " + this.getValue() + ")";
+    }
 }

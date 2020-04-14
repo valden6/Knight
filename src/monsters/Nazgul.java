@@ -2,17 +2,14 @@ package monsters;
 
 import hero.Knight;
 import objects.*;
+import settings.Settings;
 
 public class Nazgul extends King {
-
-    static final int MAX_LIFE = 100;
-    static final int GOLD_EARNED = 1500;
-    static final int XP_EARNED = 1000;
 
     private boolean invisibility;
 
     public Nazgul() {
-        super("Nazgul", MAX_LIFE,GOLD_EARNED, XP_EARNED,
+        super("Nazgul", Settings.NAZGUL_MAX_LIFE,Settings.NAZGUL_GOLD_EARNED, Settings.NAZGUL_XP_EARNED,
                 new Sword("dark sword",50,100,500),
                 new Helmet("dark hood",5,100,550),
                 new Gauntlet("dark gauntlet",5,100,600),
@@ -47,19 +44,19 @@ public class Nazgul extends King {
     }
 
     private void attackWithaWeapon(Knight player) {
-        player.receiveDammage("The " + this.getName() + " attack with his sword and", this.getSword().getDammage());
+        player.receiveDamage("The " + this.getName() + " attack with his sword and", this.getSword().getDamage());
     }
 
     @Override
-    public void receiveDammage(int dammage) {
+    public void receiveDamage(int damage) {
         if (!this.invisibility) {
-            dammage = calculateArmor(dammage);
-            reduceDurabilityEquipment(dammage);
-            if (dammage > 0) {
-                this.setLife(this.getLife() - dammage);
-                System.out.println("The " + this.getName() + " takes " + dammage + " dammage");
+            damage = calculateArmor(damage);
+            reduceDurabilityEquipment(damage);
+            if (damage > 0) {
+                this.setLife(this.getLife() - damage);
+                System.out.println("The " + this.getName() + " takes " + damage + " damage");
             } else {
-                System.out.println("You make 0 dammage due to the armor of the king");
+                System.out.println("You make 0 damage due to the armor of the king");
             }
 
             if (this.getLife() <= 0) {
@@ -71,7 +68,7 @@ public class Nazgul extends King {
             }
         } else {
             this.invisibility = false;
-            System.out.println("You make 0 dammage due to invisibility");
+            System.out.println("You make 0 damage due to invisibility");
         }
     }
 

@@ -2,7 +2,6 @@ package hero;
 
 import objects.Object;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Inventory {
@@ -37,7 +36,6 @@ public class Inventory {
 
     @Override
     public String toString() {
-        return "Inventory: " + objects.toString() +
-                "\n";
+        return "Inventory : " + objects.toString();
     }
 }

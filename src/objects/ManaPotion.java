@@ -12,4 +12,9 @@ public class ManaPotion extends Object {
     public int getManaGiven() {
         return manaGiven;
     }
+
+    @Override
+    public String toString() {
+        return "\n " + this.getName() + " (mana: " + this.manaGiven + " ; durability: " + this.getDurability() + " ; value: " + this.getValue() + ")";
+    }
 }

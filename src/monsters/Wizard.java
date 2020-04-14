@@ -3,15 +3,9 @@ package monsters;
 import hero.Knight;
 import objects.*;
 import objects.Object;
+import settings.Settings;
 
 public class Wizard extends Monster {
-
-    static final int MAX_LIFE = 100;
-    static final int GOLD_EARNED = 150;
-    static final int XP_EARNED = 500;
-    static final int MANA_MAX = 100;
-    static final int SPELL_MANA_COST = 50;
-    static final int REGENERATION_MANA = 50;
 
     private int mana;
     private int spellManaCost;
@@ -23,10 +17,10 @@ public class Wizard extends Monster {
     private HealPotion healPotion;
 
     public Wizard() {
-        super("Wizard", MAX_LIFE,GOLD_EARNED, XP_EARNED);
-        this.mana = MANA_MAX;
-        this.spellManaCost = SPELL_MANA_COST;
-        this.regenerationMana = REGENERATION_MANA;
+        super("Wizard", Settings.WIZARD_MAX_LIFE,Settings.WIZARD_GOLD_EARNED, Settings.WIZARD_XP_EARNED);
+        this.mana = Settings.WIZARD_MANA_MAX;
+        this.spellManaCost = Settings.WIZARD_SPELL_MANA_COST;
+        this.regenerationMana = Settings.WIZARD_REGENERATION_MANA;
         this.hat = new Hat("wizard hat",5,100,40);
         this.dress = new Dress("wizard dress",15,100,60);
         this.gloves = new Gloves("wizard gloves",5,100,130);
@@ -49,7 +43,6 @@ public class Wizard extends Monster {
     @Override
     public void attack(Knight player) {
         if ((this.getLife() <= 30) && this.healPotion != null){
-            System.out.println("The " + this.getName() + " use a potion");
             usePotion();
         }else if (this.mana <= this.spellManaCost){
             System.out.println("The " + this.getName() + " regenerate his mana");
@@ -61,22 +54,22 @@ public class Wizard extends Monster {
 
     protected void usePotion() {
         this.setLife(this.getLife() + this.healPotion.getLifeGiven());
-        if(this.getLife() > MAX_LIFE)
-            this.setLife(MAX_LIFE);
+        if(this.getLife() > Settings.WIZARD_MAX_LIFE)
+            this.setLife(Settings.WIZARD_MAX_LIFE);
         this.healPotion = null;
-        System.out.println("The " + this.getName() + " have now " + this.getLife() + " hp");
+        System.out.println("The " + this.getName() + " use a potion and have now " + this.getLife() + " hp");
     }
 
     @Override
-    public void receiveDammage(int dammage) {
-        dammage = calculateArmor(dammage);
-        reduceDurabilityEquipment(dammage);
+    public void receiveDamage(int damage) {
+        damage = calculateArmor(damage);
+        reduceDurabilityEquipment(damage);
 
-        if (dammage > 0 ){
-            this.setLife(this.getLife() - dammage);
-            System.out.println("The " + this.getName() + " takes " + dammage + " dammage");
+        if (damage > 0 ){
+            this.setLife(this.getLife() - damage);
+            System.out.println("The " + this.getName() + " takes " + damage + " damage");
         }else {
-            System.out.println("You make 0 dammage due to the armor of the wizard");
+            System.out.println("You make 0 damage due to the armor of the wizard");
         }
 
         if (this.getLife() <= 0) {
@@ -88,13 +81,13 @@ public class Wizard extends Monster {
     }
 
     public void attackWithaWeapon(Knight player){
-        player.receiveDammage("The " + this.getName() + " attack with his wizard staff and", this.wizardStaff.getDammage());
+        player.receiveDamage("The " + this.getName() + " attack with his wizard staff and", this.wizardStaff.getDamage());
     }
 
     protected void regenerateMana() {
         this.mana += this.regenerationMana;
-        if (this.mana > MANA_MAX)
-            this.mana = MANA_MAX;
+        if (this.mana > Settings.WIZARD_MANA_MAX)
+            this.mana = Settings.WIZARD_MANA_MAX;
     }
 
     public Object dropObject(){

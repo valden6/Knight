@@ -3,17 +3,14 @@ package monsters;
 import hero.Knight;
 import objects.*;
 import objects.Object;
+import settings.Settings;
 
 public class King extends BadKnight {
-
-    static final int MAX_LIFE = 100;
-    static final int GOLD_EARNED = 1000;
-    static final int XP_EARNED = 500;
 
     private Shield shield;
 
     public King() {
-        super("King", MAX_LIFE,GOLD_EARNED, XP_EARNED,
+        super("King", Settings.KING_MAX_LIFE,Settings.KING_GOLD_EARNED, Settings.KING_XP_EARNED,
                 new Sword("golden sword",50,100,500),
                 new Helmet("king's helmet",5,100,550),
                 new Gauntlet("king's gauntlet",2,100,600),
@@ -30,18 +27,18 @@ public class King extends BadKnight {
 
     @Override
     public void attack(Knight player) {
-        player.receiveDammage("The " + this.getName() + " attack with his sword and", this.getSword().getDammage());
+        player.receiveDamage("The " + this.getName() + " attack with his sword and", this.getSword().getDamage());
     }
 
     @Override
-    public void receiveDammage(int dammage) {
-        dammage = calculateArmor(dammage);
-        reduceDurabilityEquipment(dammage);
-        if (dammage > 0 ){
-            this.setLife(this.getLife() - dammage);
-            System.out.println("The " + this.getName() + " takes " + dammage + " dammage");
+    public void receiveDamage(int damage) {
+        damage = calculateArmor(damage);
+        reduceDurabilityEquipment(damage);
+        if (damage > 0 ){
+            this.setLife(this.getLife() - damage);
+            System.out.println("The " + this.getName() + " takes " + damage + " damage");
         }else {
-            System.out.println("You make 0 dammage due to the armor of the king");
+            System.out.println("You make 0 damage due to the armor of the king");
         }
 
         if (this.getLife() <= 0) {
@@ -55,10 +52,10 @@ public class King extends BadKnight {
 
 
     @Override
-    public int calculateArmor(int dammage){
+    public int calculateArmor(int damage){
         int armor = this.getHelmet().getProtection() + this.getGauntlet().getProtection() + this.getBreastplate().getProtection() + this.getLeggings().getProtection() + this.shield.getProtection();
-        dammage -= armor;
-        return dammage;
+        damage -= armor;
+        return damage;
     }
 
     @Override

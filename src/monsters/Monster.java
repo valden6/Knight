@@ -50,9 +50,9 @@ public class Monster {
         System.out.println("The " + this.name + " doesn't attack ");
     }
 
-    public void receiveDammage(int dammage){
-        this.life -= dammage;
-        System.out.println("The " + this.name + " takes " + dammage + " dammage");
+    public void receiveDamage(int damage){
+        this.life -= damage;
+        System.out.println("The " + this.name + " takes " + damage + " damage");
 
         if (this.life <= 0) {
             this.setAlive(false);

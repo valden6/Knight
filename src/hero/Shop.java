@@ -34,49 +34,47 @@ public class Shop {
             player.getInventory().addInInventory(objectToBuy);
             System.out.println(objectToBuy.getName() + " is bought");
             player.removeGold(objectToBuy.getValue());
+            System.out.println("\n");
         } else {
-            System.out.println("You don't have enought gold ! ");
+            System.out.println("You don't have enough gold ! ");
         }
     }
 
     public void showShop(Knight player) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("You are now in the shop...");
-        System.out.println("Gold : " + player.getGold());
-        System.out.println("What do you want to do ?");
+        System.out.println("[SHOP]");
+        System.out.println("Action : ");
         System.out.println("--> B - Buy");
         System.out.println("--> S - Sell");
         System.out.println("--> R - Repair your equipment");
         System.out.println("--> Z - Show what you have sold");
         System.out.println("--> Q - Quit the shop");
-        System.out.println("Choose your action : ");
         switch (sc.nextLine()){
             case "b":
-                System.out.println("You choose to buy...");
+                System.out.println("[BUY]");
                 buyShop(player);
                 showShop(player);
                 break;
             case "s":
-                System.out.println("You choose to sell...");
+                System.out.println("[SELL]");
                 System.out.println(player.getInventory().toString());
-                System.out.println("What do you want to sell ?");
+                System.out.println("Which object ?");
                 sellObject(player,sc.nextLine());
                 showShop(player);
                 break;
             case "z":
-                System.out.println("You choose to show what you have sold...");
                 if(!this.objectsSell.isEmpty())
-                    System.out.println(this.objectsSell.toString());
+                    System.out.println("You have sold: " + this.objectsSell.toString());
                 else
                     System.out.println("You didn't have sell something");
                 showShop(player);
                 break;
             case "r":
-                System.out.println("You choose to repair your equipment...");
+                System.out.println("[REPAIR]");
                 repairEquipment(player);
                 break;
             case "q":
-                System.out.println("You choose to quit the shop...");
+                System.out.println("You quit the shop");
                 break;
             default:
                 System.out.println("Default continue...");
@@ -97,7 +95,6 @@ public class Shop {
         System.out.println("All the reparation will cost " + repairValue + " gold");
         System.out.println("--> Y - Yes");
         System.out.println("--> N - No");
-        System.out.println("Choose your action : ");
         if(sc.nextLine().equals("y")){
             if(player.getGold() >= repairValue) {
                 player.removeGold(repairValue);
@@ -116,32 +113,28 @@ public class Shop {
     }
 
     private void buyShop(Knight player) {
+        System.out.println(player.getGold() + " gold");
         showItemToBuy();
         Scanner sc = new Scanner(System.in);
-        System.out.println("What do you want to do ?");
+        System.out.println("Action : ");
         System.out.println("--> A - Buy the first item");
         System.out.println("--> Z - Buy the second item");
         System.out.println("--> E - Buy the third item");
         System.out.println("--> N - Nothing");
-        System.out.println("Choose your action : ");
         switch (sc.nextLine()){
             case "a":
-                System.out.println("You choose to buy the first item...");
                 buyObject(player, this.objectsBuy.get(0).getName());
                 buyShop(player);
                 break;
             case "z":
-                System.out.println("You choose to buy the second item...");
                 buyObject(player, this.objectsBuy.get(1).getName());
                 buyShop(player);
                 break;
             case "e":
-                System.out.println("You choose to buy the third item...");
                 buyObject(player, this.objectsBuy.get(2).getName());
                 buyShop(player);
                 break;
             case "n":
-                System.out.println("You choose to buy nothing...");
                 break;
             default:
                 System.out.println("Default case");
@@ -150,11 +143,10 @@ public class Shop {
     }
 
     private void showItemToBuy() {
-        System.out.println("This is the items that the shop sell");
         if (!this.objectsBuy.isEmpty())
             this.objectsBuy.clear();
         randomItem();
-        System.out.println(this.objectsBuy.toString());
+        System.out.println("Shop : " + this.objectsBuy.toString());
     }
 
     private void randomItem(){
@@ -202,7 +194,7 @@ public class Shop {
 
         switch (randomNumber3){
             case 0:
-                thirdItem = new DammagePotion("Shop's dammage potion", 100,50,20);
+                thirdItem = new DamagePotion("Shop's damage potion", 100,50,20);
                 break;
             case 1:
                 thirdItem = new HealPotion("Shop's heal potion", 100,50,50);
@@ -228,10 +220,4 @@ public class Shop {
         return res;
     }
 
-    @Override
-    public String toString() {
-        return "Shop{" +
-                "objectsBuy=" + objectsBuy +
-                '}';
-    }
 }

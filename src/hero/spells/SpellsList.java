@@ -1,7 +1,5 @@
 package hero.spells;
 
-import objects.Object;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +12,7 @@ public class SpellsList {
 
         // List of all spells
         spells.add(new HealingSpell());
-        spells.add(new DammageSpell());
+        spells.add(new DamageSpell());
     }
 
     public Spell getSpellByName(String name){
@@ -33,8 +31,6 @@ public class SpellsList {
 
     @Override
     public String toString() {
-        return "SpellsList{" +
-                "spells=" + spells +
-                '}';
+        return spells.toString();
     }
 }

@@ -12,4 +12,9 @@ public class HealPotion extends Object {
     public int getLifeGiven() {
         return lifeGiven;
     }
+
+    @Override
+    public String toString() {
+        return "\n " + this.getName() + " (life: " + this.lifeGiven + " ; durability: " + this.getDurability() + " ; value: " + this.getValue() + ")";
+    }
 }

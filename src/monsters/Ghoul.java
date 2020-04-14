@@ -1,33 +1,29 @@
 package monsters;
 
 import hero.Knight;
+import settings.Settings;
 
 public class Ghoul extends Monster{
 
-    static final int MAX_LIFE = 50;
-    static final int GOLD_EARNED = 100;
-    static final int XP_EARNED = 150;
-    static final int DAMMAGE = 10;
-
-    private int dammage;
+    private int damage;
     private boolean secondLife;
 
     public Ghoul() {
-        super("Ghoul", MAX_LIFE, GOLD_EARNED, XP_EARNED);
-        this.dammage = DAMMAGE;
+        super("Ghoul", Settings.GHOUL_MAX_LIFE, Settings.GHOUL_GOLD_EARNED, Settings.GHOUL_XP_EARNED);
+        this.damage = Settings.GHOUL_DAMAGE;
         this.secondLife = false;
     }
 
     @Override
     public void attack(Knight player) {
-        player.receiveDammage("The " + this.getName() + " bite you and", this.dammage);
+        player.receiveDamage("The " + this.getName() + " bite you and", this.damage);
     }
 
     @Override
-    public void receiveDammage(int dammage){
-        this.setLife(this.getLife() - dammage);
+    public void receiveDamage(int damage){
+        this.setLife(this.getLife() - damage);
 
-        System.out.println("The " + this.getName() + " takes " + dammage + " dammage");
+        System.out.println("The " + this.getName() + " takes " + damage + " damage");
 
         if (this.getLife() <= 0) {
             if (this.secondLife) {
@@ -35,7 +31,7 @@ public class Ghoul extends Monster{
                 System.out.println("The " + this.getName() + " is dead !");
             }else{
                 this.secondLife = true;
-                this.setLife(MAX_LIFE);
+                this.setLife(Settings.GHOUL_MAX_LIFE);
                 System.out.println("The " + this.getName() + " revive !");
             }
         } else {
